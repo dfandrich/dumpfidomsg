@@ -1,0 +1,63 @@
+There is the people who has contributed with ideas, pieces of code,
+and debugging to the "tx" versions.
+
+First of all I want to thanks Eugene Crosser <crosser@average.org>, the
+author, for doing this all possible.
+
+- Tsuneo Tanaka <tt@efnet.com>, who has been the main contributor, with
+  lots of useful ideas and code, taken from his JE version as well as posterior
+  contributions.
+- Ken Lunde <lunde@adobe.com>, which has written the Japanese conversion code
+  from which is the derived the Japanese code included here.
+- Thomas Quinot <operator@melchior.cuivre.fdn.fr>, for correcting a bug about
+  a null pointer that I introduced (it was not visible with an a.out kernel,
+  so I missed it for long time).
+- Jean-Louis Noel <jln@habcnx.stben.be>, for fool-proofing improvements in
+  tcpproto.c.
+- Wim Van Sebroeck <vsebro@medelec.uia.ac.be>, for the -DDONT_REGATE code
+  and the "secure mode"-code for ifmail.
+- Krzysztof Halasa <khc@hq.pm.waw.pl>, for pointing me to the CHRS: values
+  used in Poland.
+- Yar Tikhiy <yar@comp.chem.msu.su> who sent to the mailing list a patch for
+  SEEN-BY database building improvement and an ifpack.c patch.
+- Dmitry Kohmanyuk <dk@dog.farm.org> for the mxlookup code.
+- Marc SCHAEFER <schaefer@alphanet.ch> for the references stuff and the
+  Areas.site feature.
+- Marco d'Itri <md@linux.it> for the DEFAULT_ORIGIN idea
+- Jerko Golubovic <Jerko.Golubovic@f112.n381.z2.fidonet.org> for correcting
+  a bug in ifcico/nodelist.c
+- Igor Vinokurov <igor@cs.ibank.ru> for the specific hacks for FreeBSD
+- Roland Rosenfeld <roland@spinnaker.rhein.de> 2:2450/42 for the ifmaprequest
+  patch
+- Urko Lusa <ulusa@frodo.com> for several comments on quoting 8bit characters
+  from/to FTN packet headers (spanish use very often 8bit chars on their fido
+  names...)
+- Frank Ellermann for his very good explanation of differences between packet
+  types 2, 2+ and 2.2 in the fido area NET_DEV.
+- Luc Moreau for translating the manpages into french.
+- Michael Holzt <kju@so1.sauerland-online.de> for help implementing Gatebau
+  stlye MSGID/Message-ID conversions
+- Pavel Pavlov for the info on Bulgarian charset mik-cyr and the translation
+  tables koi8__mik, mik_koi8, mik__iso-8859-5, iso-8859-5__mik and correction
+  of base64 code.
+- Erik Warmelink (2:282/1.60) for a nice rewritting of MACHIGAI code.
+- Stanislav Meduna <stano@trillian.eunet.sk> for the map tables of the
+  "Kamenicky" encoding used in Cz and Sk.
+- "Marco d'Itri" <md@linux.it> for the italian language file
+- Erik Warmelink (2:282/1.60) for the idea to enable '#' on echoareas names.
+- Andrzej Jordanow for some ideas to support "FTN only" nodes and various
+  bug reports.
+- Vladimir Zarozhevsky 2:5050/17 for the hydra code.
+- Boris Tobotras for the Txy nodelist flag code.
+- Christof Meerwald <cmeerw@htl.fh-sbg.ac.at>, for his ifcico-3.0-cm version
+  from which I borrowed the hydra code and several utilities and man pages.
+  http://www.cosy.sbg.ac.at/~cmeer/ifcico/
+
+And many people that tested and show interest in the "tx" versions.
+
+Thanks folks !
+Pablo Saratxaga
+
+~
+~
+:wq ;-)                                   PGP Key available, key ID: 8F0E4975

@@ -1,0 +1,88 @@
+# Macintosh extended characters to iso-8859-1
+128 'Ä'		# A dieresis
+129 'Å'		# A ring
+130 'Ç'		# C cedilla
+131 'É'		# E acute
+132 'Ñ'		# N tilde
+133 'Ö'		# O dieresis
+134 'Ü'		# U dieresis
+135 'á'		# a acute
+136 'à'		# a grave
+137 'â'		# a circumflex
+138 'ä'		# a dieresis
+139 'ã'		# a tilde
+140 'å'		# a ring
+141 'ç'		# c cedilla
+142 'é'		# e acute
+143 'è'		# e grave
+144 'ê'		# e circumflex
+145 'ë'		# e dieresis
+146 'í'		# i acute
+147 'ì'		# i grave
+148 'î'		# i circumflex
+149 'ï'		# i dieresis
+150 'ñ'		# n tilde
+151 'ó'		# o acute
+152 'ò'		# o grave
+153 'ô'		# o circumflex
+154 'ö'		# o dieresis
+155 'õ'		# o tilde
+156 'ú'		# u acute
+157 'ù'		# u grave
+158 'û'		# u circumflex
+159 'ü'		# u dieresis
+160 '+'		# dagger
+161 '°'		# ring / degree
+162 'ç'		# cent
+163 '£'		# pound sterling
+164 '§'		# section
+165 '·'		# bullet
+166 '§'		# paragraph
+167 'ß'		# german double s
+168 '®' 	# registered trademark
+169 '©'		# copyright
+170 'T'		# trademark
+171 '´'		# acute
+172 '¨'		# dieresis
+174 'Æ'		# AE
+175 'Ø'		# O slash
+#176 		# infinity
+177 '±'		# plusminus
+178 '«'		# smaller equals
+179 '»'		# greater equals
+180 '¥'		# Yen
+181 'µ'		# mu
+182 'ð'		# delta
+#183 0xE4		# Sigma (summation)
+#184 0xE3		# Pi
+#185 0xE3		# pi
+187 'ª'		# ord feminine
+188 'º'		# ord masculine
+#189 0xEA		# Omega
+190 'æ'		# ae
+191 'ø'		# o slash
+192 '¿'		# question downwards
+193 '¡'		# exclam downwards
+194 '¬'		# logical not
+195 'V'		# radical
+196 'f'		# florin
+197 '~'		# approx.
+#198 0x7F		# Delta
+199 '»'		# guillemot right
+200 '«'		# guillemot left
+201 '.'			# ellipsis
+202 32			# non breaking space
+203 'Á'		# A acute
+204 'Ã'		# A tilde
+205 'Õ'		# O tilde
+206 'Ö'		# OE
+207 'ö'		# oe
+#208 0xFA	# en dash
+209 '-'		# em dash
+210 '"'		# double quote left
+211 '"'		# double quote right
+212 '`'		# quote left
+213 '\''	# quote right
+214 '÷'		# divide
+#215 0x04	# lozenge
+216 'ÿ'		# y dieresis

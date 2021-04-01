@@ -1,0 +1,71 @@
+128 0x82		# C with cedilla
+129 0x9F		# u dieresis
+130 0x8E		# e acute
+131 0x89		# a circumflex
+132 0x8A		# a dieresis
+133 0x88		# a grave
+134 0x8C		# a ring
+135 0x8D		# c cedilla
+136 0x90		# e circumflex
+137 0x91		# e dieresis
+138 0x8F		# e grave
+139 0x95		# i dieresis
+140 0x94		# i circumflex
+141 0x93		# i grave
+142 0x80		# A dieresis
+143 0x81		# A ring
+144 0x83		# E acute
+145 0xBE		# ae
+146 0xAE		# AE
+147 0x99		# o circumflex
+148 0x9A		# o dieresis
+149 0x97		# o acute
+150 0x9E		# u circumflex
+151 0x9D		# u grave
+152 0xD8		# y dieresis
+153 0x85		# O dieresis
+154 0x9F		# U dieresis
+155 0xA2		# cent
+156 0xA3		# pound sterling
+157 0xB4		# yen
+158 'P'			# Pt
+159 0xC4		# florin
+160 0x87		# a acute
+161 0x93		# i grave
+162 0x98		# o grave
+163 0x9D		# u grave
+164 0x96		# n tilde
+165 0x84		# N tilde
+166 0xBB		# ord feminine
+167 0xBC		# ord masculine
+168 0xC0		# question downwards
+169 '-'			# 
+170 0xC2		# logical not
+172 0xC1		# exclam downwards
+173 0xC7		# guillemot left
+174 0xC8		# guillemot right
+224 'a'			# alpha
+225 0xA7		# german double s (misused as Beta)
+227 0xB9		# pi
+228 0xB7		# Sigma (summation)
+230 0xB5		# mu
+234 0xBD		# Omega
+235 0xB6		# delta
+236 0xB0		# infinity
+237 0xBF		# o slash
+240 '='			# equivalence
+241 0xB1		# plusminus
+242 0xB3		# greater equals
+243 0xB2		# smaller equals
+244 '?'			# integral top
+245 '?'			# integral bottom
+246 0xD6		# divide
+247 0xC5		# approx.
+248 0xA1		# ring / degree
+249 '.'			# centered dot
+250 0xD0		# en dash
+251 0xC3		# radical
+252 'n'			# to the n'th power
+253 '2'			# to the second power
+254 0xA5	
+255 32			# space

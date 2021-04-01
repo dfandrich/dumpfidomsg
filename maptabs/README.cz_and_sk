@@ -1,0 +1,26 @@
+From: Stanislav Meduna <stano@trillian.eunet.sk>
+
+I send you an information on charsets used in Czech and Slovak Republic
+(FIDO region 42).
+
+This region historically uses "Kamenicky" coding of local characters.
+This coding was used here long before M$ 852 and 1250 codepages
+existed and the idea behind this was that the text in Kamenicky
+coding is well readable also on displays with only CP437 loaded.
+The FIDO network in Czechia and Slovakia uses this (and only this)
+coding for east european characters in message bodies. The
+headers are always ASCII-only.
+
+The (unofficial ?) codepage number is 895 and the CHRS kludge
+used is "CP895 2".
+
+The situation in the internet world is clear - ISO 8859-2 is
+used, but most of the local newsgroups don't use national
+characters at all.
+
+I send you the (hopefully correct) mapping tables for
+
+Kamenicky -> PC     (cp895__cp437)
+Kamenicky -> ISO L2 (cp895_iso-8859-2)
+ISO L2 -> Kamenicky (iso-8859-2__cp895)
+
