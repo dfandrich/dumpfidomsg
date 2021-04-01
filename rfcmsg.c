@@ -31,7 +31,7 @@ FILE *fp;
 	char	buffer[BUFSIZ];
 	char	*p;
 
-	while(bgets(buffer,BUFSIZ-1,fp) && strcmp(buffer,"\n"))
+	while(fgets(buffer,BUFSIZ-1,fp) && strcmp(buffer,"\n"))
 	{
 		newcont=(buffer[strlen(buffer)-1] != '\n');
 		debug(17,"Line read: \"%s\" - %s continued",

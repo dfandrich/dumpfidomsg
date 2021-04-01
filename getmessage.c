@@ -20,7 +20,7 @@
 #include "config.h"
 #include "crc.h"
 #include "charset.h"
-#include "acl.h"
+//#include "acl.h"
 
 #define KWDCHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
 		"abcdefghijklmnopqrstuvwxyz" \
@@ -31,7 +31,7 @@ extern char *rfcdate(time_t);
 
 int pgpsigned;
 
-extern acl *packet_acl, *message_acl, *origin_acl;
+//extern acl *packet_acl, *message_acl, *origin_acl;
 
 static time_t parsefdate(char *,void *);
 static time_t parsefdate(str,now)
@@ -72,22 +72,6 @@ faddr *p_from,*p_to;
 
 	tmsg=&kmsg;
 
-	switch(tmp=iread(pkt))
-	{
-	case 0:	debug(5,"zero message type - end of packet?");
-		tmp=iread(pkt);
-		if (feof(pkt)) return maxrc;
-		else
-		{
-			loginf("Junk after the logical end of packet at %lu skipped",
-				(unsigned long)ftell(pkt));
-			return maxrc;
-		}
-	case 2:	break;
-	default:logerr("bad message type: 0x%04x",tmp);
-		return 2;
-	}
-
 	pgpsigned=0;
 
 	f.zone=0;
@@ -99,49 +83,47 @@ faddr *p_from,*p_to;
 	f.domain=NULL;
 	t.domain=NULL;
 
-	f.node=iread(pkt);
+    if (fread(buf, 1, 36, pkt) != 36) {
+		loginf("Could not read message start, aborting");
+		return 3;
+    }
+    buf[36] = 0;
+	f.name=xstrcpy(buf);
+
+    if (fread(buf, 1, 36, pkt) != 36) {
+		loginf("Could not read message, aborting");
+		return 3;
+    }
+    buf[36] = 0;
+	t.name=xstrcpy(buf);
+
+    if (fread(buf, 1, 72, pkt) != 72) {
+		loginf("Could not read message, aborting");
+		return 3;
+    }
+    buf[72] = 0;
+	subj=xstrcpy(buf);
+
+    if (fread(buf, 1, 20, pkt) != 20) {
+		loginf("Could not read message, aborting");
+		return 3;
+    }
+    buf[20] = 0;
+	mdate=parsefdate(buf,NULL);
+
+	tmp=iread(pkt); // times
 	t.node=iread(pkt);
+	f.node=iread(pkt);
+	tmp=iread(pkt); // cost
 	f.net=iread(pkt);
 	t.net=iread(pkt);
+	tmp=iread(pkt); // written date l
+	tmp=iread(pkt); // written date h
+	tmp=iread(pkt); // arrived date l
+	tmp=iread(pkt); // arrived date h
+	tmp=iread(pkt); // reply
 	flags=iread(pkt);
-	tmp=iread(pkt);
-	if (aread(buf,sizeof(buf)-1,pkt))
-	{
-		mdate=parsefdate(buf,NULL);
-		while (aread(buf,sizeof(buf)-1,pkt))
-		{
-			loginf("date not null-terminated: \"%s\"",buf);
-		}
-	}
-	if (aread(buf,sizeof(buf)-1,pkt))
-	{
-		t.name=xstrcpy(buf);
-		while (aread(buf,sizeof(buf)-1,pkt))
-		{
-			if (*(p=t.name+strlen(t.name)-1) == '\n') *p='\0';
-			loginf("to name not null-terminated: \"%s\"",buf);
-		}
-	}
-	if (aread(buf,sizeof(buf)-1,pkt))
-	{
-		f.name=xstrcpy(buf);
-		while (aread(buf,sizeof(buf)-1,pkt))
-		{
-			if (*(p=f.name+strlen(f.name)-1) == '\n') *p='\0';
-			loginf("from name not null-terminated: \"%s\"",buf);
-		}
-	}
-	if (aread(buf,sizeof(buf)-1,pkt))
-	{
-		subj=xstrcpy(buf);
-		while (aread(buf,sizeof(buf)-1,pkt))
-		{
-			if (*(p=subj+strlen(subj)-1) == '\n') *p='\0';
-			subj=xstrcat(subj,"\\n");
-			subj=xstrcat(subj,buf);
-			loginf("subj not null-terminated: \"%s\"",buf);
-		}
-	}
+	tmp=iread(pkt); // up
 
 	if (feof(pkt) || ferror(pkt))
 	{
@@ -344,31 +326,6 @@ faddr *p_from,*p_to;
 	if ((via_off) && (via_off < endmsg_off)) endmsg_off=via_off;
 	debug(5,"end message offset %ld",(long)endmsg_off);
 	
-
-	if (kmsg && !strcmp(kmsg->key,"AREA"))
-	{
-		if (match_acl(kmsg->val, p_from, p_to, packet_acl) == DENY) 
-		{
-			loginf("message from %s in area %s denied by packet header filter",
-			    ascfnode(p_from, 0xf), kmsg->val);
-			goto skip;
-		}
-		if (match_acl(kmsg->val, &m_from, &m_to, message_acl) == DENY)
-		{
-			loginf("message from %s in area %s denied by message header filter",
-			    ascfnode(&m_from, 0xf), kmsg->val);
-			goto skip;
-		}
-
-		if (match_acl(kmsg->val, &f, NULL, origin_acl) == DENY)
-		{
-			loginf("message from %s in area %s denied by origin filter",
-			    ascfnode(&f, 0xf), kmsg->val);
-			goto skip;
-		}
-
-	}
-
 	rewind(fp);
 	rc=mkrfcmsg(&f,&t,subj,orig,mdate,flags,fp,endmsg_off,kmsg);
 	if (rc) rc+=10;
@@ -382,10 +339,10 @@ skip:
 	if(f.domain) free(f.domain); f.domain=NULL;
 	if(t.domain) free(t.domain); t.domain=NULL;
 
-	if (feof(pkt) || ferror(pkt))
+	if (!feof(pkt) || ferror(pkt))
 	{
-		logerr("Unexpected end of packet");
+		logerr("Unexpected error in packet");
 		return 5;
 	}
-	return 1;
+	return 0;
 }

@@ -1,0 +1,126 @@
+# Configuration file for dumpfidomsg
+# Compile-time default name of this file may be overridden by -I key.
+
+# Lines with the first non-blank character '#' are comments.
+
+# Log file name. Overrides compile-time default.
+logfile		/var/log/ifmail/iflog
+
+# Debug file name. Overrides compile-time default.
+debugfile	/var/log/ifmail/ifdebug
+
+# Debugging verbosity (is overridden by -x key). Default is 0.
+verbose		0
+
+# Main address:
+address			2:999/999
+#address		2:5020/230@fidonet
+
+# AKAs:
+#address		2:5020/6.14@fidonet
+#address		2:5020/23.14@fidonet
+#address		2:5020/49.14@fidonet
+#address		100:5020/23.14@dummynet
+
+# System alias file - try to fetch ftn-style aliases from there.
+# If "from" address of a message from FidoNet matches _right_ side
+# of some entry in sysalias file, then the Reply-To: header is created
+# in the RFC message with the name part taken from the left side of the
+# sysalias entry and domain part taken from myfqdn (below). E.g., if a 
+# Fidonet message comes from "John Smith of 1:234/567.89@fidonet" and 
+# there is an entry in the sysalias file:
+# "jsmith:	John.Smith@p89.f567.n234.z1.fidonet.org"
+# and fqdn value is "pccross.msk.su", then the resulting message will
+# contain a line: "Reply-To: jsmith@pccross.msk.su".
+#sysalias	/etc/ifmail/aliases
+
+# This host fully qualified domain name to add to the alias above
+myfqdn		example.com
+
+# If this is specified, The "To:" line at the beginning of the Fidonet message
+# will be kept in consideration _only_ if the message is addresses to the name
+# specified. Thus, defining a magicname prevents the problems of different
+# addresses in To: line and envelope. This is specially the case in mailing
+# lists. Without defining a magicname if you are in a mailing list messages
+# will be bounced back as the To: line doesn't show your address but the ML one
+magicname       UUCP
+
+# Primary nodelist (serves "outbound" directory and domain from the
+# first "address" statement). Name expanded with ".NNN" if necessary.
+nodelist	/var/spool/ftn/nl.d/nodelist
+
+# Secondary nodelists and nodelists for other domains.
+# use directory name from the first "nodelist" statement.
+#		filename	originating address
+#nodelist	pnt5020.ndl	2:5020/0@fidonet
+#nodelist	chatlist	100:0/0@chateaunet
+#nodelist	private.ndl	2:5020/0@fidonet
+
+# domain translations, just context substitution.  Leading dot recommended.
+# May contain '@'-sign too.  First matching used.
+# NOTE: If you specify at least one domtrans line, there will be _NO_
+# default for fidonet <--> fidonet.org.  Don't forget to specify it
+# explicitly as a last line.
+#		FTN side		Internet side
+# fidonet (zones 1 -> 6 )
+#domtrans	.n5020.z2.fidonet	.fido.pccross.msk.su
+#domtrans	.n5030.z2.fidonet	.fido.tctube.spb.su
+domtrans        .z1.fidonet             .z1.fidonet.org
+domtrans        .z2.fidonet             .z2.fidonet.org
+domtrans        .z3.fidonet             .z3.fidonet.org
+domtrans        .z4.fidonet             .z4.fidonet.org
+domtrans        .z5.fidonet             .z5.fidonet.org
+domtrans        .z6.fidonet             .z6.fidonet.org
+# domain names
+#domtrans        .beginnet               .beginnet.ftn
+#domtrans        .n320.z101.francom      .belgique.fm.alphanet.ch
+#domtrans        .n352.z101.francom      .luxembourg.fm.alphanet.ch
+# zone numbers (fidonet is added by default)
+#domtrans        .n320.z101.fidonet      .belgique.fm.alphanet.ch
+#domtrans        .n352.z101.fidonet      .luxembourg.fm.alphanet.ch
+#domtrans	.z140.fidonet		.z140.beginnet.ftn
+# default (the rest)
+#domtrans	.fidonet		.ftn
+domtrans	.fidonet		.fidonet.org
+
+# Areas file (format: "AREA newsgroup distribution")
+areas		/etc/ifmail/Areas
+
+# Groups for which the Gatebau-style of MSGID<-->Message-ID conversion
+# must be done. Same syntax as badgroup lines. *** USE WHITH CARE ***
+gatebaugroup	fido.
+#gatebaugroup	de.
+
+# Directory where character translation tables (for eight-bit charsets) are.
+# 
+# The format of the files is as follows:
+#
+# <orig.char> <whitespace> <dest.char>
+#
+# (one character in a line).  <orig.char> and <dest.char> can be specified
+# in one of four notation styles:
+# - character itself in single quotes (e.g. 'a')
+# - decimal number (e.g. 123)
+# - octal number (e.g. 0123)
+# - hexadecimal number (e.g. 0x7f)
+#
+# Crosshatch ('#') denotes start of comment; space, tab and crosshatch
+# characters cannot be specified using the first (character) notation.
+#
+maptabdir	/usr/share/ifmail/maptabs
+
+# Default charsets to be used when ifmail can't found info in the message
+# see the file README.charsets for a list of available values and for
+# values to use for several countries.
+# 
+defaultftnchar		cp437
+defaultrfcchar		iso-8859-1
+
+# The "defaultftnchar" keyword defines the default charset for incoming 
+# FTN messages. "toftnchar" is to force translation of _outgoing_ FTN
+# messages. By default ifmail doesn't translate when doing rfc->FTN
+# gating due to the complexity to find the right charset, and the fact 
+# that in most FTN networks the charset used in rfc is also valid.
+# If your FTN network require a given charset define it here.
+#
+#toftnchar		cp437

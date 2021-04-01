@@ -34,7 +34,7 @@
 #include "charconv.h"
 #include "mime.h"
 #ifdef REFERENCES_MSC96
-#include "ref_interface.h"
+  #include "ref_interface.h"
 extern ref_private_t *ref_dbase;
 #endif
 #ifdef RESTAMP_OLD_POSTINGS
@@ -225,7 +225,7 @@ faddr *bestaka;
 #endif
 	else
 	{
-		sprintf(buf,"<%lu@%s.ftn>",(unsigned long)sequencer(),
+		sprintf(buf,"<%lu@%s.ftn>",(unsigned long)random(),
 			ascinode(bestaka,0x1f));
 	}
 	tidy_faddr(ta);
@@ -235,6 +235,7 @@ faddr *bestaka;
 
 /* check address for localness, substitute alises and replace it *in place* */
 
+#if 0
 void substitute(buf)
 char *buf;
 {
@@ -295,6 +296,7 @@ char *buf;
 	debug(6,"to address after  subst: \"%s\"",buf);
 	return;
 }
+#endif
 
 /* from, to, subj, orig, mdate, flags, file, offset, kluges */
 
@@ -520,31 +522,22 @@ rfcmsg *kmsg;
 		}
 		else if (modtype==1)  sprintf(buf,"%s",moderator);
 		else sprintf(buf,"%s",ascinode(t,0x7f));
-		substitute(buf);
+		//substitute(buf);
 		loginf("mail from %s to %s",ascfnode(f,0x7f),buf);
 	}
 
 	if ((newsmode) && (nb == NULL))
 	{
-		if (notransports)
-		{
-			nb=fopen(tempnam("/tmp/ifmail","N."),"w");
-#ifndef RNEWSB
-			fprintf(nb,"#!/bin/sh\n%s <<__EOF__\n",S(rnews));
-#endif
-		}
-		else
-		{
-			setenv("UU_MACHINE",ascinode(&pktfrom,0x0f),1);
-			nb=expipe(rnews,NULL,NULL);
-			unsetenv("UU_MACHINE");
-		}
+        nb=stdout;
 		if (nb == NULL)
 		{
 			logerr("$Could non open (pipe) output for news");
 			tidyrfc(msg);
 			return 2;
 		}
+#ifndef RNEWSB
+        fprintf(nb,"#!/bin/sh\n%s <<__EOF__\n",S(rnews));
+#endif
 	}
 
 	if (newsmode)
@@ -569,23 +562,7 @@ rfcmsg *kmsg;
 #endif
 		debug(2,"expipe(\"%s\",\"%s\",\"%s\")",
 			S(sendmail),ascinode(f,0x7f),buf);
-		if (notransports)
-		{
-			pip=fopen(tempnam("/tmp/ifmail","M."),"w");
-#ifdef ALLOW_RETURNPATH
-		if (p)
-			fprintf(pip,"#!/bin/sh\nF=%s\nT=%s\n%s <<__EOF__\n",
-				p,buf,S(sendmail));
-		else
-#endif
-			fprintf(pip,"#!/bin/sh\nF=%s\nT=%s\n%s <<__EOF__\n",
-				ascinode(f,0x7f),buf,S(sendmail));
-		}
-#ifdef ALLOW_RETURNPATH
-		else if (p)
-			pip=expipe(sendmail,p,buf);	
-#endif
-		else pip=expipe(sendmail,ascinode(f,0x7f),buf);
+        pip=stdout;
 		if (pip == NULL)
 		{
 			logerr("$Could non open (pipe) output for mail");
@@ -1244,12 +1221,6 @@ rfcmsg *kmsg;
 		fputs(buf,nb);
 		while (fgets(buf,sizeof(buf)-1,pip))
 			fputs(buf,nb);
-	}
-	if ((
-	     (notransports || newsmode)?(rc=fclose(pip)):(rc=exclose(pip))
-	   ))
-	{
-		logerr("$close of transport pipe or tmp file returned %d",rc);
 	}
 	tidyrfc(msg);
 	if (rc < 0) rc=-rc;

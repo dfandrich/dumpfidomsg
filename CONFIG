@@ -1,5 +1,5 @@
 # Compile-time configuration for ifmail FidoNet mailer and gateway
-COPYRIGHT   = "Eugene G. Crosser, 1993-1997"
+COPYRIGHT   = "Eugene G. Crosser 1993-1997, Dan Fandrich 2021"
 
 ##############################################################
 # Included a lot of code from version 2.8c-JE13JUL1995       #
@@ -30,17 +30,17 @@ COPYRIGHT   = "Eugene G. Crosser, 1993-1997"
 # Other modifications are from me.                           #
 # ( Pablo Saratxaga <srtxg@chanae.alphanet.ch> )             #
 ##############################################################
-VERSION     = "2.14-tx8.10"
+VERSION     = "1"
 #SHVER       = 2.14tx
 
 # Where to put binaries
-BINDIR = $(DESTDIR)"/usr/lib/ifmail"
+BINDIR = $(DESTDIR)"/usr/bin"
 
 # Main configuration file. This default may be overwritten by -I key.
 CONFIGFILE  = $(DESTDIR)"/etc/ifmail/config"
 
 # Where translations tables reside
-MAPTABDIR = $(DESTDIR)"/usr/lib/ifmail/maptabs"
+MAPTABDIR = $(DESTDIR)"/usr/share/ifmail/maptabs"
 
 # Debug messages turned on by -x key are written here.
 # Some error messages may occationally appear here too.
@@ -58,27 +58,6 @@ LOGFILE     = $(DESTDIR)"/var/log/ifmail/iflog"
 # Define -DHAS_SYSLOG (see below)
 #MAILLOG    = LOG_MAIL
 MAILLOG    = LOG_LOCAL0
-#NEWSLOG    = LOG_NEWS
-NEWSLOG    = LOG_LOCAL0
-#CICOLOG    = LOG_UUCP
-CICOLOG    = LOG_LOCAL0
-
-# Directory where UUCP lock files reside.
-#LOCKDIR     = $(DESTDIR)"/var/spool/uucp"
-LOCKDIR     = $(DESTDIR)"/var/lock"
-
-# Directory from which file requests are resolved.
-# This may be changed from the 'config' file.
-PUBDIR      = $(DESTDIR)"/home/ftp/pub"
-#PUBDIR      = $(DESTDIR)"/var/spool/uucppublic"
-
-# News spool directory (to check space only)
-#NEWSSPOOL   = $(DESTDIR)"/usr/spool/news"
-NEWSSPOOL   = $(DESTDIR)"/var/spool/news"
-
-# Fake directory where resultant files go if `-N' key used (trailing slash
-# needed)
-FAKEDIR     = $(DESTDIR)"/tmp/ifmail/"
 
 # Uses libintl for internationalizing some strings. Interactive messages are
 # printed in your language, according to LC_MESSAES or LANG variable)
@@ -94,28 +73,7 @@ USE_NLS = yes
 #
 #REFERENCES_MSC96 = yes
 
-# use a shared lib for common functions ?
-# Does not work yet.
-#SHARED = yes
-
 # Compile-time system-dependant options. 
-
-# If you specify "-DHAS_NDBM_H", ndbm calls will be used instead
-# of dbm ones, and the feature will be activated of Cnews log processing
-# to add entries to SEEN-BY if echo message is exported to several FTN
-# nodes by Cnews mechanism. This works with INN too.
-
-# If you specify "-DHAS_STATFS" or "-DHAS_STATVFS", statfs() (or statvfs()
-# respectivly) call will be used to check available disk space. For statfs()
-# call, you must also specify which .h file to use: "-DSTATFS_IN_VFS_H" or 
-# "-DSTATFS_IN_STATFS_H" or "-DSTATFS_IN_STATVFS_H"  or "-DSTATFS_IN_MOUNT_H". 
-# For statvfs() call, statvfs.h is included.
-
-# define -DSCO_STYLE_STATFS if your statfs() call requires 4 arguments.
-
-# If you specify "-DHAS_SETSID", setsid() call is used to detach from the
-# control terminal. Otherwise setpgrp() call is used, and in this case you
-# may specify "-DBSD_SETPGRP" to use BSD-style call.  Used in ifcico only.
 
 # If you specify "-DDONT_HAVE_TM_GMTOFF", timezone offset will be calculated
 # from the difference between the results of localtime() and gmtime() calls
@@ -124,118 +82,22 @@ USE_NLS = yes
 # If you specify "-DDONT_HAVE_GETOPT", local definitions for getopt will
 # be used (but not the function itself)
 
-# For ifcico, you must specify -DHAS_TERMIOS_H (preffered), -DHAS_TERMIO_H
-# or -DHAS_SGTTY_H to use POSIX-y, SysV-ish of BSD-ish terminal control.
-
-# in SVR4 you should specify -DHAS_DIAL (and maybe -DHAS_DIAL_H) to use
-# dial() library function instead of regular open().  Lock files are
-# not used in this case.
-
-# for uucp lock files, you must specify either -DASCII_LOCKFILES or
-# -DBINARY_LOCKFILES
-
-# define -DHAS_FSYNC if there is a fsync() system call (to update .flo
-# files)
-
-# define -DPARANOID if you want iftoss to deny packets with wrong password.
-
-# define -DRELAXED if you want iftoss to accept packets that are not
-# addressed to your node.
-
-# define -DFORCEINTL if you want ifmail to create ^aINTL even if this is
-# not an inter-zone netmail.
-
 # define -DNEED_UUCPFROM if your MTA needs a uucp "From" line in mail.
-
-# define -DHAS_TCP if you want ifmail to be able to originate outgoing
-# connections over TCP/IP (socket library needed)
-
-# define -DHAS_TERM if you want ifmail to be able to originate outgoing
-# connections over TERM (TCP "extention", client.a needed)
-
-# define -DHAS_REGEX_H or -DHAS_LIBGEN_H if you have either of these
-# header files for regular expression handlers.
 
 # define -DHAS_SYSLOG to use syslog() instead of logging to files.
 # Files are necessary anyway, external programs' stdout and stderr
 # are redirected there.
 
-# define -DNEED_BSY if you want ifpack and ifcico to create .bsy
-# files preventing simultaneous processing of the same node.
-# This is *not* necessary, ifcico will work without such locking.
-
-# define -DNEED_FORK if your system is uncapable of getting rid of the
-# control terminal unless you are running not as a group leader.
-
-# as of June 1994, FreeBSD has a nasty bug in the kernel lseek() code:
-# if you make lseek() to a point before the start of the file, it
-# succeeds and the writing point becomes negative.  Fortunately, 
-# subsequent write()s fail :-).  To overwork this, define 
-# -DNEGATIVE_SEEK_BUG, this will add an extra fseek() to restore
-# zero writing point where necessary.
-
 # define -DNEED_TRAP if you want debugging information when the programs
 # are aborted with segmentation fault etc.  Currently tested and works 
 # only with Linux, and only with kernels >= 1.1.20.
-
-# define -DSLAVE_SENDS_NAK_TOO if you have problems answering incoming
-# EMSI sessions originated by FrontDoor.  FrontDoor does not follow
-# EMSI specifications when originating calls, this is a workaround.
-
-# define -DBELEIVE_ZFIN=1 if you cannot get files sent by Terminate.
-# Original Zmodem source does not beleive first ZFIN packet when
-# receiving file, and sends more than one ZFIN while sending.  But
-# it seems that Terminate Zmodem only send one ZFIN.  I could not
-# check this myself.  If not defined, BELEIVE_ZFIN will be assumed
-# 2, that is, skip 1st ZFIN but acknowledge second.
-
-# define -DDONT_HAVE_DIRENT if there is no working opendir()/readdir()
-# etc. in your libc.  You will also need to add "dirent.o" to the NEEDED
-# (see below).
-
-# define -DHAS_BSD_SIGNALS if your SIGALRM does not interrupt system
-# calls by default.  Note that this also needed on Linux with glibc2
-# (libc6.x.x)
-
-# define -DDONT_HAVE_DBMCLOSE if your dbm implementation does not have
-# dbmclose() / dbm_close() function.
-
-# define -DHAS_BSD_DB if you have BSD `db' package instead of usual
-# [nsg]dbm.  We use ndbm compatibility interface of `db', so you also
-# need to specify -DHAS_NDBM_H.  `ndbm compatibility' interface of BSD
-# db is not fully ndbm compatible, this is a workaround.
 
 # specify -DINT32=<type> which type corresponds to 32bit and
 # -DINT16=<type> - which type corresponds to 16bit integer on your
 # system, usually "-DINT32=long -DINT16=short"
 
-# ### Defines from ifcico 3.0.cm
-
-# define HAS_SELECT if you have select() system call.  alarm() will not
-# be used for timed reads and bidirectional protocols.
-
-# define -DHAS_SYS_SELECT_H if your select() prototype is in sys/select.h
-# (otherwise assumed to be in sys/time.h)
-
-# define -DSELECT_NEED_SYS_TIMES_H if #include <sys/times.h> needed to
-# use select() (maybe some SCO versions)
-
-# define -DSELECT_NEED_BSDTYPES_H if #include <bsdtypes.h> needed to
-# use select()
-
-# define -DEXPERIMENTAL_EMSI if you like to live on the edge... :-)
-# It enables experimental EMSI code which should be a bit more standards
-# conforming
-
-# ### Defines from version 2.8c-JE
-
 # define -DIGNORE_SOFTCR if you need to treat SoftCR (0x8d) as a printable
 # character.
-
-# define -DKEEP_TEARLINES_CLEAN if you want to keep tearlines clean.
-
-# define -DREPLACE_TEARLINES_WITH=\""ifmail 2.8b-JE for 1BM OSF/2"\" if you
-# want to replace tearlines with "ifmail 2.8b-JE for 1BM OSF/2."
 
 # define -DRESTAMP_FUTURE_POSTINGS if your news transport agent
 # refuses/rejects 'future postings.'
@@ -257,8 +119,6 @@ USE_NLS = yes
 # -DALLOW_CONTROL allows Control: headers to be gated, and Control: cancel
 # to be be created from their ftn counterparts and vice-versa
 
-# -DFORCE_REPLYTO forces REPLYTO and REPLYADDR lines
-
 # -DFORCE_REPLYTO_LOCAL use address local (bestaka), even if a REPLYTO
 # with another address already exists.
 # So your downlinks only saw gated mail as being from your machine
@@ -271,15 +131,8 @@ USE_NLS = yes
 # ( \, `, $, etc.). 
 
 # define -DRESTAMP_OLD_POSTINGS=XX if you want to allow your news transport
-# agent to accept articles older tan 15 days (but not more than XX).
+# agent to accept articles older than 15 days (but not more than XX).
 # This can be necessary because of the low velocity of FTN routing.
-
-# define -DDONT_REGATE if you don't want ifmail to gate a message
-# that was originally gated by another gateway system.
-
-# -DKEEP_MSGID_ON_SPLIT keeps the Message-ID on splitted FTN messages.
-# so they are not gated back to usenet on another gateway if the original
-# rfc article reached the site first.
 
 # -DAREAS_HACKING allows you to define Areas.fidosite files which
 # are scanned for a given fidosite. If the file doesn't exist, then it
@@ -295,46 +148,20 @@ USE_NLS = yes
 # I recommend you to leave the default value of 1 if you don't _really_ know
 # what you are doing.
 
-# -DFSC_0047 implements fsc-0047 ^aSPLIT kludges for splitted messages
-# !!! NOT WORKING YET !!!!
-# If someone can take a look at it and really implement it I'll highly appreciate
-# !!! NOT WORKING YET !!!!
-
-# -DDEFAULT_ORIGIN=\"string\" to specify the string to put in Origin lines
-# for messages which haven't one nor an Organisation: header.
-# The default is "Unknown".
-
 # -DTERMAIL_HACK tries to correct a bug in TerMail 4 which sometimes reports
 # incorrect charsets (ie: puts "LATIN-1 2" while the message use in fact 
 # "IBMPC 2". Hoping that version 5 will repair it.
 
-# -DFSCHTML text/html support from fsc proposal of Lee Kindness (2:259/7.1)
-# <lkindness@csl.co.uk>
-
-# -DPGP_LIKE_DASHES compiles the Eugene's code that changes "---" to "- ---"
-# I prefer not tu use it until I don't do the reverse, it will also mess up
-# the PGP signatures...
-
-# -DPKT_2_2 creates outbound packets in the 2.2 pkt format,
-# instead of 2+ format. take a look at iflib/packet.c for the differences
-# between those two formats
-
 # -DGATEBAU_MSGID uses Gatebau rules for MSGID <-> Message-ID conversion
 # instead of the ifmail rules. ** USE IT WHITH CARE **
 
-# -DADD_PID adds a ^aPID kludge when gating to FTN whit the name of the
-# user program used by the message author (if that can be retrieved; if not
-# the ^aPID isn't added)
-
 #General options:
 # These are not machine dependent, and describe only ifmail/ifcico features
-OPTS        = -DTERMAIL_HACK -DTPUT_STATUS_HACK -DADD_PID -DLEVEL=0 \
-		-DDONT_REGATE -DSLAVE_SENDS_NAK_TOO \
+OPTS        = -DTERMAIL_HACK -DLEVEL=0 \
 		-DRNEWSB -DJE \
-		-DRESTAMP_OLD_POSTINGS=14 -DBELEIVE_ZFIN=1 \
-		-DHAS_TCP -DAREAS_HACKING \
-		-DRESTAMP_FUTURE_POSTINGS -DFSCHTML -DMACHIGAI \
-		-DALLOW_RETURNPATH -DGATEBAU_MSGID \
+		-DAREAS_HACKING \
+		-DMACHIGAI \
+		-DGATEBAU_MSGID \
 		-DDIRTY_CHRS -DHIDDEN \
 		-DAREAS_NUMERAL_COMMENTS
 		
@@ -432,14 +259,13 @@ OPTS        += -DHAS_STATFS -DSTATFS_IN_VFS_H -DHAS_SETSID -DHAS_NDBM_H \
 #		-DNEED_BSY -DSLAVE_SENDS_NAK_TOO -DINT32=int -DINT16=short
 
 # for make install, where to put binaries and what owner to set
-# (owner should be a `trusted user' for your MTA)
-OWNER = fnet
-GROUP = fnet
-MODE = 0711
+#OWNER = root
+#GROUP = root
+MODE = 0755
 SMODE = 4710
-MANDIR = $(DESTDIR)"/usr/man"
-MANOWNER = man
-MANGROUP = man
+MANDIR = $(DESTDIR)"/usr/share/man"
+#MANOWNER = man
+#MANGROUP = man
 MANMODE = 0644
 
 INSTALL = install --strip-program=/bin/true
@@ -458,7 +284,7 @@ TAR = tar
 
 #CFLAGS = -g -Wall
 # Linux, 386BSD, FreeBSD, SunOS:
-CFLAGS = -Wall -fno-strict-aliasing $(EXTRA_CFLAGS)
+CFLAGS = -g -Wall -fno-strict-aliasing $(EXTRA_CFLAGS)
 # SVR4:
 #CFLAGS = -O -Xa
 # NeXTSTEP
@@ -468,7 +294,7 @@ CFLAGS = -Wall -fno-strict-aliasing $(EXTRA_CFLAGS)
 #CFLAGS= -migrate -O5 -ifo -g0
 #LDFLAGS = -s
 
-LDFLAGS += -Wl,--as-needed $(EXTRA_LDFLAGS)
+LDFLAGS += -g -Wl,--as-needed $(EXTRA_LDFLAGS)
 
 # For LIBS, you may need to add "-lfl" if you are using flex 2.4.x
 # If you need TERM also add e.g. "/usr/src/term112/client.a"
@@ -476,7 +302,7 @@ LDFLAGS += -Wl,--as-needed $(EXTRA_LDFLAGS)
 # Linux
 # add -lresolv if you use libc6 (aka glibc 2)
 # remove -lresolv if you use libc5
-LIBS = -lgdbm -lgdbm_compat -lresolv
+#LIBS = -lgdbm -lgdbm_compat -lresolv
 # SunOS:
 #LIBS =
 # 386BSD, FreeBSD:
@@ -525,7 +351,7 @@ ifeq (yes,${USE_NLS})
 # comment out this line if you use glibc
 #LIBS += -lintl
 NLSDIR=/usr/share/locale
-NLSPACKAGE=ifmail
+NLSPACKAGE=dumpfidomsg
 OPTS += -DHAVE_LOCALE_H -DNLS_CAT_NAME=\"${NLSPACKAGE}\" \
 	-DNLS_LOCALE_PATH=\"${NLSDIR}\"
 endif

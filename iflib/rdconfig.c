@@ -418,13 +418,6 @@ int readconfig(void)
 		}
 #endif
 
-		if (outbound == NULL)
-		{
-		fprintf(stderr,"%s(EOF): outbound not specified\n",
-				configname);
-			if (maxrc < 1) maxrc=1;
-		}
-
 		if (whoami && (nllist == NULL))
 		{
 			nllist=(fa_list*)xmalloc(sizeof(fa_list));
