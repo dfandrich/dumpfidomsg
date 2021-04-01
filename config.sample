@@ -107,7 +107,9 @@ gatebaugroup	fido.
 # Crosshatch ('#') denotes start of comment; space, tab and crosshatch
 # characters cannot be specified using the first (character) notation.
 #
-maptabdir	/usr/share/ifmail/maptabs
+#maptabdir	/usr/share/ifmail/maptabs
+maptabdir      ./maptabs
+
 
 # Default charsets to be used when ifmail can't found info in the message
 # see the file README.charsets for a list of available values and for
