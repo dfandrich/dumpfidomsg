@@ -37,6 +37,9 @@
 #include "ref_interface.h"
 extern ref_private_t *ref_dbase;
 #endif
+#ifdef RESTAMP_OLD_POSTINGS
+extern long restampolder;
+#endif
 
 #define BOUNDARY 79
 #define MAXPATH 73
@@ -338,6 +341,9 @@ rfcmsg *kmsg;
 	if (p == NULL) p=hdr("CODEPAGE",kmsg);
 	if (p) outcode=readchrs(p);
 	else
+#ifdef STUPID_CHRS_DETECT
+                outcode=defaultftnchar;
+#else
 	{
 		p=hdr("Content-Type",msg);
 		if (p == NULL) p=hdr("RFC-Content-Type",kmsg);
@@ -359,6 +365,7 @@ rfcmsg *kmsg;
 		else outcode=defaultftnchar;
 #endif
 	}
+#endif
 #ifdef TERMAIL_HACK
 	p=hdr("PID",kmsg);
 	if ((p) && (!strncmp(p,"TerMail",7)) && (outcode==defaultrfcchar))
@@ -396,6 +403,9 @@ rfcmsg *kmsg;
 	else newsmode=0;
 	debug(5,"Got %s message",newsmode?"echo":"netmail");
 	if (outcode==CHRS_NOTSET)
+#ifdef STUPID_CHRS_DETECT
+                outcode=defaultftnchar;
+#else
 	{
 		if ((hdr("Message-ID",msg)) ||
 		    (hdr("RFC-Message-ID",kmsg)) ||
@@ -409,8 +419,9 @@ rfcmsg *kmsg;
 		     (!chkftnmsgid(rfcmsgid(hdr("MSGID",kmsg),bestaka)))))
 #endif
 			outcode=defaultrfcchar;
-		 else outcode=defaultftnchar;
+		else outcode=defaultftnchar;
 	}
+#endif
 	if (pgpsigned) incode=outcode;
 	else if (incode==CHRS_NOTSET) incode=getincode(outcode);
 
@@ -522,7 +533,12 @@ rfcmsg *kmsg;
 			fprintf(nb,"#!/bin/sh\n%s <<__EOF__\n",S(rnews));
 #endif
 		}
-		else nb=expipe(rnews,NULL,NULL);
+		else
+		{
+			setenv("UU_MACHINE",ascinode(&pktfrom,0x0f),1);
+			nb=expipe(rnews,NULL,NULL);
+			unsetenv("UU_MACHINE");
+		}
 		if (nb == NULL)
 		{
 			logerr("$Could non open (pipe) output for news");
@@ -794,8 +810,13 @@ rfcmsg *kmsg;
 		} else
 #endif
 #ifdef RESTAMP_OLD_POSTINGS
+		if(mdate < 31532400) {	/* 1971/1/1 */
+		    loginf("Bad date from %s", ascfnode(f,0x3f));
+		    fprintf(pip,"Date: %s\n", rfcdate(now));
+		    fprintf(pip,"X-Bad-Date: ignored\n");
+		} else
 		if((mdate < time(&now)-14*24*60*60) &&
-		   (mdate > time(&now)-RESTAMP_OLD_POSTINGS*24*60*60)) {
+		   (mdate > time(&now)-restampolder*24*60*60)) {
 			loginf("Article too old, restamped: %s", rfcdate(mdate));
 			fprintf(pip,"Date: %s\n", rfcdate(now));
 			fprintf(pip,"X-Origin-Date: %s\n", rfcdate(mdate));

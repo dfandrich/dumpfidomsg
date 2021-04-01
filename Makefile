@@ -18,7 +18,7 @@ OBJMAIL = version.o ifmail.o rfcmsg.o message.o mkftnhdr.o \
 		charconv.o charconv_jp.o charconv_hz.o charconv_utf.o
 OBJTOSS = version.o iftoss.o areas.o \
 		getmessage.o mkrfcmsg.o rfcmsg.o batchrd.o \
-		ifdbm.o backalias.o msgflags.o \
+		ifdbm.o backalias.o msgflags.o acl.o \
 		charconv.o charconv_jp.o charconv_hz.o charconv_utf.o
 OBJUNPACK = version.o ifunpack.o unpacker.o flock.o
 OBJPACK = version.o ifpack.o flock.o
@@ -28,10 +28,10 @@ SRCS = ifmail.c rfcmsg.c message.c mkftnhdr.c \
 		iftoss.c getmessage.c mkrfcmsg.c \
 		nlindex.c nodecheck.c \
 		ifunpack.c unpacker.c ifpack.c flock.c \
-		backalias.c msgidbm.c attach.c ifstat.c lastmtime.c \
+		backalias.c msgidbm.c attach.c ifstat.c lastmtime.c acl.c \
 		body.c charconv.c charconv_jp.c charconv_hz.c charconv_utf.c
 HDRS = areas.h mkrfcmsg.h mkftnhdr.h nlindex.h nodecheck.h \
-		charconv.h charconv_jp.h charconv_hz.h
+		charconv.h charconv_jp.h charconv_hz.h acl.h
 OTHER = README Makefile testmail newsin pkt ifmail.8 iftoss.8
 ALL = ifmail ifnews iftoss ifunpack ifpack ifstat
 
@@ -126,7 +126,11 @@ config:
 version.c:	${SRCS} ${HDRS} lastmtime ../CONFIG
 	echo 'char *version=${VERSION};' >version.c
 	echo 'char *copyright=${COPYRIGHT};' >>version.c
+ifdef SOURCE_DATE_EPOCH
+	echo "char *reldate=\"$(shell LC_ALL=C date --utc --date="@$(SOURCE_DATE_EPOCH)" +%c)\";" >>version.c
+else
 	echo "char *reldate=\"`./lastmtime ${SRCS} ${HDRS}`\";" >>version.c
+endif
 
 depend:	version.c
 	@rm -f Makefile.bak; \

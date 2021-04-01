@@ -18,6 +18,7 @@
 #include "ftn.h"
 #include "getheader.h"
 #include "trap.h"
+#include "acl.h"
 #ifdef DIRTY_CHRS
 #include "charset.h"
 int dirtyoutcode;
@@ -41,6 +42,9 @@ extern void readalias(char *);
 extern int exclose(FILE *);
 
 extern int num_echo,num_mail;
+extern long paranoid;
+
+acl *packet_acl, *message_acl, *origin_acl;
 
 int usetmp=1; /* to tell bgets that we do not use batch mode */
 int notransports=0;
@@ -113,23 +117,34 @@ char *argv[];
 #endif
 	if (aliasfile) readalias(aliasfile);
 
+	packet_acl=read_acl(pktaclfile);
+	message_acl=read_acl(msgaclfile);
+	origin_acl=read_acl(orgaclfile);
+
 	if (notransports)
 	{
 		mkdir(FAKEDIR,0777);
 		loginf("messages/newsbatches will go to %s",FAKEDIR);
 	}
 
-#ifdef PARANOID
-	if (((rc=getheader(&from,&to,stdin)) != 0) &&
-	    ((rc != 3) || (!relaxed)))
-#else
-	if (((rc=getheader(&from,&to,stdin)) != 0) &&
-	    ((rc != 3) || (!relaxed)) &&
-	    (rc != 4))
-#endif
-	{
-		logerr("%s, aborting",(rc==3)?"packet not to this node":
-			(rc==4)?"bad password":"bad packet");
+	switch ((rc=getheader(&from,&to,stdin))) {
+	    case 0:
+		break;
+	    case 2:
+		logerr("bad packet, aborting");
+		exit(rc);
+	    case 3:
+		if (relaxed)
+		    break;
+		logerr("packet not to this node, aborting");
+		exit(rc);
+	    case 4:
+		if (!paranoid)
+		    break;
+		logerr("bad password, aborting");
+		exit(rc);
+	    default:
+		logerr("can't happen: getheader returned %d", rc);
 		exit(rc);
 	}
 #ifdef AREAS_HACKING

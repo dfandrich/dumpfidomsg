@@ -16,9 +16,9 @@ time_t now;
 	if (!now) time(&now);
 	ptm=*localtime(&now);
 
-	sprintf(buf,"%s, %02d %s %02d %02d:%02d:%02d %s",
+	sprintf(buf,"%s, %02d %s %d %02d:%02d:%02d %s",
 		wdays[ptm.tm_wday],ptm.tm_mday,months[ptm.tm_mon],
-		ptm.tm_year%100,ptm.tm_hour,ptm.tm_min,ptm.tm_sec,
+		1900+ptm.tm_year,ptm.tm_hour,ptm.tm_min,ptm.tm_sec,
 		gmtoffset(now));
 	return(buf);
 }

@@ -22,6 +22,7 @@ int code;
 	if ((code==CHRS_MACINTOSH) && (toftnchar!=CHRS_NOTSET))
 		return toftnchar;
 	else if (code==CHRS_MACINTOSH) return CHRS_ISO_8859_1;
+        else if (code==CHRS_KOI8_R) return CHRS_CP866; /* R50 echos are *always* in cp866 - ams */
 	else if ((toftnchar!=CHRS_NOTSET) && (code==defaultrfcchar)) 
 		return toftnchar;
 	else if (code==CHRS_UTF_7||code==CHRS_UTF_8) return CHRS_AUTODETECT;
@@ -210,6 +211,7 @@ char *p;
 	else if (strncasecmp(p,"CP852",5) == 0) code=CHRS_CP852;
 	else if (strncasecmp(p,"CP862",5) == 0) code=CHRS_CP862;
 	else if (strncasecmp(p,"CP866",5) == 0) code=CHRS_CP866; /* ??? */
+	else if (strncasecmp(p,"FIDO7",5) == 0) code=CHRS_CP866; /* also used in R50 of Z2 */
 	else if (strncasecmp(p,"CP895",5) == 0) code=CHRS_CP895;
 	else if (strncasecmp(p,"CP932",5) == 0) code=CHRS_SJIS;
 	else if (strncasecmp(p,"CP942",5) == 0) code=CHRS_SJIS;

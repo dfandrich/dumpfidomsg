@@ -23,6 +23,8 @@
 /* SUPPRESS 595 on yypvt *//* Automatic variable may be used before set */
 #include "configdata.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
 #include <sys/types.h>
 #if	defined(DO_NEED_TIME)
@@ -665,7 +667,7 @@ LookupWord(buff, length)
 }
 
 
-static int
+int
 date_lex()
 {
     register char	c;

@@ -17,6 +17,8 @@
 #define _(String)	(String)
 #endif
 
+#include <time.h>
+
 #include "ftn.h"
 
 #ifndef AREA_LIST_TYPE
@@ -77,7 +79,7 @@ extern area_list *gatebaugroups;
 #endif
 
 extern long configverbose;
-extern long configtime;
+extern time_t configtime;
 extern long maxfsize;
 extern long maxpsize;
 extern long maxmsize;
@@ -138,6 +140,10 @@ extern char *maptabdir;
 extern int  defaultrfcchar;
 extern int  defaultftnchar;
 extern int  toftnchar;
+
+extern char *pktaclfile;
+extern char *msgaclfile;
+extern char *orgaclfile;
 
 int readconfig(void);
 int confopt(int,char*);

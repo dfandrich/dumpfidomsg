@@ -69,8 +69,8 @@ LOCKDIR     = $(DESTDIR)"/var/lock"
 
 # Directory from which file requests are resolved.
 # This may be changed from the 'config' file.
-#PUBDIR      = $(DESTDIR)"/home/ftp/pub"
-PUBDIR      = $(DESTDIR)"/var/spool/uucppublic"
+PUBDIR      = $(DESTDIR)"/home/ftp/pub"
+#PUBDIR      = $(DESTDIR)"/var/spool/uucppublic"
 
 # News spool directory (to check space only)
 #NEWSSPOOL   = $(DESTDIR)"/usr/spool/news"
@@ -92,7 +92,7 @@ USE_NLS = yes
 # the correct References: line
 # see iflib/ref.c for more complete info
 #
-REFERENCES_MSC96 = yes
+#REFERENCES_MSC96 = yes
 
 # use a shared lib for common functions ?
 # Does not work yet.
@@ -223,6 +223,10 @@ REFERENCES_MSC96 = yes
 # define -DSELECT_NEED_BSDTYPES_H if #include <bsdtypes.h> needed to
 # use select()
 
+# define -DEXPERIMENTAL_EMSI if you like to live on the edge... :-)
+# It enables experimental EMSI code which should be a bit more standards
+# conforming
+
 # ### Defines from version 2.8c-JE
 
 # define -DIGNORE_SOFTCR if you need to treat SoftCR (0x8d) as a printable
@@ -324,15 +328,14 @@ REFERENCES_MSC96 = yes
 
 #General options:
 # These are not machine dependent, and describe only ifmail/ifcico features
-OPTS        = -DFORCE_REPLYTO -DTERMAIL_HACK -DTPUT_STATUS_HACK \
+OPTS        = -DTERMAIL_HACK -DTPUT_STATUS_HACK -DADD_PID -DLEVEL=0 \
 		-DDONT_REGATE -DSLAVE_SENDS_NAK_TOO \
-		-DPUDDLE_GATE -DPCBOARD_GATE -DRNEWSB -DJE \
-		-DRESTAMP_OLD_POSTINGS=25 -DBELEIVE_ZFIN=1 \
-		-DKEEP_MSGID_ON_SPLIT -DIGNORE_SOFTCR \
-		-DRELAXED -DFORCEINTL -DHAS_TCP -DAREAS_HACKING \
+		-DRNEWSB -DJE \
+		-DRESTAMP_OLD_POSTINGS=14 -DBELEIVE_ZFIN=1 \
+		-DHAS_TCP -DAREAS_HACKING \
 		-DRESTAMP_FUTURE_POSTINGS -DFSCHTML -DMACHIGAI \
 		-DALLOW_RETURNPATH -DGATEBAU_MSGID \
-		-DDIRTY_CHRS \
+		-DDIRTY_CHRS -DHIDDEN \
 		-DAREAS_NUMERAL_COMMENTS
 		
 #		-DAREAS_NUMERAL_COMPATIBILITY
@@ -345,9 +348,10 @@ OPTS        = -DFORCE_REPLYTO -DTERMAIL_HACK -DTPUT_STATUS_HACK \
 OPTS        += -DHAS_STATFS -DSTATFS_IN_VFS_H -DHAS_SETSID -DHAS_NDBM_H \
 		-DDONT_HAVE_TM_GMTOFF -DHAS_TERMIOS_H -DASCII_LOCKFILES \
 		-DHAS_FSYNC -DHAS_IOCTL_H -DHAS_REGEX_H \
-		-DHAS_SYSLOG -DNEED_BSY -DNEED_TRAP \
+		-DNEED_BSY -DNO_IO_AFTER_HANGUP -DDO_NEED_TIME \
 		-DNEED_FORK -DHAS_BSD_SIGNALS -DHAS_SELECT \
-		-DINT32=long -DINT16=short
+		-DUSE_SETPROCTITLE \
+		-DINT32=long -DINT16=short -D_GNU_SOURCE
 
 # 386BSD, FreeBSD:
 #OPTS        += -DHAS_STATFS -DSTATFS_IN_MOUNT_H -DHAS_SETSID -DHAS_NDBM_H \
@@ -438,15 +442,15 @@ MANOWNER = man
 MANGROUP = man
 MANMODE = 0644
 
-INSTALL = install
+INSTALL = install --strip-program=/bin/true
 AR = ar
 RANLIB = ranlib
 #RANLIB = touch
 SHELL = /bin/sh
 ECHO = echo -e
-CC = gcc
-#YACC = bison -y
-YACC = yacc
+CC = cc
+YACC = bison -y
+#YACC = yacc
 #LEX = flex
 LEX = lex
 AWK = awk
@@ -454,7 +458,7 @@ TAR = tar
 
 #CFLAGS = -g -Wall
 # Linux, 386BSD, FreeBSD, SunOS:
-CFLAGS = -O2 -Wall
+CFLAGS = -Wall -fno-strict-aliasing $(EXTRA_CFLAGS)
 # SVR4:
 #CFLAGS = -O -Xa
 # NeXTSTEP
@@ -464,7 +468,7 @@ CFLAGS = -O2 -Wall
 #CFLAGS= -migrate -O5 -ifo -g0
 #LDFLAGS = -s
 
-LDFLAGS +=
+LDFLAGS += -Wl,--as-needed $(EXTRA_LDFLAGS)
 
 # For LIBS, you may need to add "-lfl" if you are using flex 2.4.x
 # If you need TERM also add e.g. "/usr/src/term112/client.a"
@@ -472,7 +476,7 @@ LDFLAGS +=
 # Linux
 # add -lresolv if you use libc6 (aka glibc 2)
 # remove -lresolv if you use libc5
-LIBS = -lgdbm -lresolv
+LIBS = -lgdbm -lgdbm_compat -lresolv
 # SunOS:
 #LIBS =
 # 386BSD, FreeBSD:
@@ -488,7 +492,7 @@ LIBS = -lgdbm -lresolv
 # NeXTSTEP
 #LIBS = -lgdbm -lposix
 
-INCLUDES = -I${INCDIR}
+INCLUDES = -iquote . -iquote ${INCDIR} -I/usr/include
 # ISC
 #INCLUDES = -I/usr/include/rpcsvc -I${INCDIR}
 
@@ -499,7 +503,7 @@ INCLUDES = -I${INCDIR}
 #NEEDED = strcasestr.o strncasecmp.o strcasecmp.o rename.o mkdir.o usleep.o \
 #		regexpr.o strerror.o
 # Linux
-NEEDED = strcasestr.o
+#NEEDED = strcasestr.o
 # SVR4
 #NEEDED = regexpr.o strcasestr.o
 # Solaris

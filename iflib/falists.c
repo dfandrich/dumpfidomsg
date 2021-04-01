@@ -5,6 +5,9 @@
 #include "ftn.h"
 #include "falists.h"
 
+/* these calls are too much time consuming */
+#define	debug(ignored...)
+
 int in_list(addr,fap)
 faddr *addr;
 fa_list **fap;

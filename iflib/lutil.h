@@ -32,6 +32,8 @@ char *printablec(char);
 extern int getopt();
 extern char *optarg;
 extern int optind;
+#else
+#include <getopt.h>
 #endif
 
 #if defined(HAS_TCP) || defined(HAS_TERM)
@@ -42,5 +44,14 @@ extern int optind;
 #define TCPMODE_IFC	0	/* ifcico native EMSI on raw TCP */
 #define TCPMODE_TELNET	1	/* EMSI encapsulation through telnet */
 #define TCPMODE_BINKP	2	/* Binkp protocol */
+
+/* for the benefit of Hurd systems, which are too good to have static limits */
+#ifndef MAXHOSTNAMELEN
+#define MAXHOSTNAMELEN 64
+#endif
+
+#ifndef PATH_MAX
+#define PATH_MAX 512
+#endif
 
 #endif /* IFMAIL_LUTIL_H */

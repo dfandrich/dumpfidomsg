@@ -370,7 +370,7 @@ char *ascinode(a,fl)
 faddr *a;
 int fl;
 {
-	static char buf[128],*f,*t,*q;
+	static char buf[256],*f,*t,*q;
 	dom_trans *dt;
 	fa_list *tmpl;
 	int skip;

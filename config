@@ -13,13 +13,14 @@ debugfile	/var/log/ifmail/ifdebug
 verbose		0
 
 # Main address:
-address		2:5020/230@fidonet
+address			2:999/999
+#address		2:5020/230@fidonet
 
 # AKAs:
-address		2:5020/6.14@fidonet
-address		2:5020/23.14@fidonet
-address		2:5020/49.14@fidonet
-address		100:5020/23.14@dummynet
+#address		2:5020/6.14@fidonet
+#address		2:5020/23.14@fidonet
+#address		2:5020/49.14@fidonet
+#address		100:5020/23.14@dummynet
 
 # Passwords for connections. checked by ifcico.
 # Inserted into EMSI and yoohoo packets.
@@ -48,7 +49,7 @@ include		/etc/ifmail/passwds
 # "jsmith:	John.Smith@p89.f567.n234.z1.fidonet.org"
 # and fqdn value is "pccross.msk.su", then the resulting message will
 # contain a line: "Reply-To: jsmith@pccross.msk.su".
-sysalias	/usr/lib/smail/aliases
+sysalias	/etc/ifmail/aliases
 
 # This host fully qualified domain name to add to the alias above
 myfqdn		pccross.msk.su
@@ -62,17 +63,15 @@ myfqdn		pccross.msk.su
 magicname       UUCP
 
 # Directory for incoming packets/files:
-inbound		/var/spool/ifmail/inb
+inbound		/var/spool/ftn/inb
 # Directories for "listed" and "protected" sessions
-listinbound	/var/spool/ifmail/inb
-protinbound	/var/spool/ifmail/inb
+listinbound	/var/spool/ftn/inb
+protinbound	/var/spool/ftn/inb
 
 # Directory for outgoing packets (default domain and zone):
 # other zones will be like "/usr/spool/ifmail/outb.003",
 # other domains will be like "/usr/spool/ifmail/<domain>.<zone>"
-# I prefer to name the default outbound as "fidonet", so it is consistent
-# with the naming pattern of the other domains.
-outbound	/var/spool/ifmail/fidonet
+outbound	/var/spool/ftn/outb
 
 # If you specify this, outgoing arcmail files will go to `outbound',
 # but be reffered as being in `dosoutbound' in the .flo files
@@ -88,7 +87,7 @@ public		/var/spool/uucppublic
 # to many shortnames without problems.  If one shortname points to many
 # fullnames, all matches are sent. The files are sent under their 
 # shortnames.
-reqmap		/usr/local/lib/fnet/reqmap
+#reqmap		/etc/ifmail/reqmap
 
 # Directory with executables to satisfy "magic" file requests
 # if requested a file present in this directory, it will be
@@ -96,18 +95,18 @@ reqmap		/usr/local/lib/fnet/reqmap
 # is not executable, it is read line by line and the lines are
 # processed as if they were received file requests (recusively).
 # Execution of commands may compromize security!  You are warned.
-magic		/usr/lib/ifmail/magic
+#magic		/usr/local/lib/ifmail/magic
 
 # Primary nodelist (serves "outbound" directory and domain from the
 # first "address" statement). Name expanded with ".NNN" if neccessary.
-nodelist	/var/spool/ifmail/nl.d/nodelist
+nodelist	/var/spool/ftn/nl.d/nodelist
 
 # Secondary nodelists and nodelists for other domains.
 # use directory name from the first "nodelist" statement.
 #		filename	originating address
 #nodelist	pnt5020.ndl	2:5020/0@fidonet
 #nodelist	chatlist	100:0/0@chateaunet
-nodelist	private.ndl	2:5020/0@fidonet
+#nodelist	private.ndl	2:5020/0@fidonet
 
 # domain translations, just context substitution.  Leading dot recommended.
 # May contain '@'-sign too.  First matching used.
@@ -116,8 +115,8 @@ nodelist	private.ndl	2:5020/0@fidonet
 # explicitly as a last line.
 #		FTN side		Internet side
 # fidonet (zones 1 -> 6 )
-domtrans	.n5020.z2.fidonet	.fido.pccross.msk.su
-domtrans	.n5030.z2.fidonet	.fido.tctube.spb.su
+#domtrans	.n5020.z2.fidonet	.fido.pccross.msk.su
+#domtrans	.n5030.z2.fidonet	.fido.tctube.spb.su
 domtrans        .z1.fidonet             .z1.fidonet.org
 domtrans        .z2.fidonet             .z2.fidonet.org
 domtrans        .z3.fidonet             .z3.fidonet.org
@@ -125,34 +124,34 @@ domtrans        .z4.fidonet             .z4.fidonet.org
 domtrans        .z5.fidonet             .z5.fidonet.org
 domtrans        .z6.fidonet             .z6.fidonet.org
 # domain names
-domtrans        .beginnet               .beginnet.ftn
-domtrans        .n320.z101.francom      .belgique.fm.alphanet.ch
-domtrans        .n352.z101.francom      .luxembourg.fm.alphanet.ch
+#domtrans        .beginnet               .beginnet.ftn
+#domtrans        .n320.z101.francom      .belgique.fm.alphanet.ch
+#domtrans        .n352.z101.francom      .luxembourg.fm.alphanet.ch
 # zone numbers (fidonet is added by default)
-domtrans        .n320.z101.fidonet      .belgique.fm.alphanet.ch
-domtrans        .n352.z101.fidonet      .luxembourg.fm.alphanet.ch
-domtrans	.z140.fidonet		.z140.beginnet.ftn
+#domtrans        .n320.z101.fidonet      .belgique.fm.alphanet.ch
+#domtrans        .n352.z101.fidonet      .luxembourg.fm.alphanet.ch
+#domtrans	.z140.fidonet		.z140.beginnet.ftn
 # default (the rest)
 domtrans	.fidonet		.ftn
 
 # Automatically updated alias database.  If omitted or inaccessible,
 # ^aREPLYADDR and ^aREPLYTO kludges are generated in fido messages.
-database	/var/spool/ifmail/ifdbm
+database	/var/spool/ftn/ifdbm
 
 # Sequencer file (used to generate unique IDs)
-sequencer	/var/spool/ifmail/seq
+sequencer	/var/spool/ftn/seq
 
 # Areas file (format: "AREA newsgroup distribution")
 areas		/etc/ifmail/Areas
 
 # Bad groups prefixes - do not pass to fido if appear in Newsgroups header
 # This is NOT the same as "!news.group" in the cnews "sys" file.
-badgroup	relcom.ads.
-badgroup	relcom.commerce.
+#badgroup	relcom.ads.
+#badgroup	relcom.commerce.
 
 # Groups for which the Gatebau-style of MSGID<-->Message-ID conversion
 # must be done. Same syntax as badgroup lines. *** USE WHITH CARE ***
-gatebaugroup	fido.ger.
+gatebaugroup	fido.
 #gatebaugroup	de.
 
 # Maximum allowed number of groups in the Newsgroups header, article will
@@ -201,7 +200,7 @@ defaultrfcchar		iso-8859-1
 # Transport programs for mail and news, used by iftoss
 # for sendmail, $F expands to "from" address, $T - to "to" address.
 sendmail	/usr/sbin/sendmail -oi -f $F $T
-rnews		/usr/lib/news/rnews
+rnews		/usr/bin/rnews
 
 # Toss program, used by ifunpack
 iftoss		/usr/lib/ifmail/iftoss
@@ -209,11 +208,11 @@ iftoss		/usr/lib/ifmail/iftoss
 # Unpackers, used by ifunpack. 
 # $F expands to archive file name
 unzip		/usr/bin/unzip -Lojq $F
-unarj		/usr/lib/ifmail/unarj e $F
+unarj		/usr/bin/unarj e $F 2> /dev/null
 unlzh		/usr/bin/lha xiq $F
 unarc		/usr/bin/arc x $F
 unzoo		/usr/bin/zoo -extract $F
-unrar		/usr/lib/ifmail/unrar e $F
+unrar		/usr/bin/unrar e $F 2> /dev/null
 
 # Packer program, used by ifpack
 # $F expands to archieve file name, $P - to list of packet names
@@ -225,24 +224,19 @@ maxfsize	500000
 # Maximum packet size, ifmail/ifnews will start new packet if exeeds.
 # *.?ut files are NOT created if nonzero specified, you must run ifpack
 # to make packets go out.
-maxpsize	30000
+maxpsize	300000
 
 # Maximum message size when splitting big messages of usenet origin
-# default is 12300 bytes
-maxmsize 12300
+maxmsize 123000
 
 # Flavors that should not be subject to packet size limiting.  These
 # flavors will be put into `ready to send' packets and not packed
 # by ifpack.  Special flavor 'm' means "all netmail".
-nonpacked	cm
+#nonpacked	cm
 
 # cnews log file and (temporary) database for seen-bys
-newslog		/usr/lib/news/log
-msgidbm		/tmp/ifmsgids
-
-# MSGID <-> Message-ID database, for creating correct References when gating
-# if commented out this feature isn't activated
-refdbm		/tmp/ref_db
+newslog		/var/log/news/log
+msgidbm		/var/spool/ftn/ifmsgids
 
 # From this line on, values may be prefixed by a logical expression in
 # round brackets. Operators are: '!', '&', '|', 'Xor'.
@@ -260,7 +254,7 @@ refdbm		/tmp/ref_db
 #         e.g. "phone 7-095-"
 
 # Dialing parameters
-# of multiple "ModemPort", "ModemReset", "ModemDial", "ModemHangup" lines, 
+# of multiple "ModemPort", "ModemReset", "ModemDial", lines, 
 # first matching is used.
 # of multiple "PhoneTrans", "ModemConnect", "ModemError" lines, all matching 
 # are used.
@@ -283,7 +277,7 @@ refdbm		/tmp/ref_db
 # actual speed is taken from the nodelist.  If speed is omitted (or set
 # to zero), previous port speed is not changed.
 #ModemPort	(time Any0000-0900,Sat,Sun) cua0
-ModemPort	ttyS1:L38400
+ModemPort	modem:L57600
 
 # PhoneTrans lines provide rules to change phone prefixes to make local
 # or long-distance calls.  In the example below, my country code is 7,
@@ -299,11 +293,10 @@ PhoneTrans	32-4	/
 PhoneTrans	32-	/	0
 PhoneTrans		/	00
 ModemReset	ATZ\r
-ModemDial	(time Any0800-2200 & address 2:5020/49) AT&M5&N4DP\T\r
-ModemDial	(address 2:5020/49) AT&M5&N6DP\T\r
-ModemDial	(speed < 4800) AT&N3DP\T\r
-ModemDial		ATDP\T\r
-ModemHangup	ATZ\r
+#ModemDial	(time Any0800-2200 & address 2:5020/49) AT&M5&N4DP\T\r
+#ModemDial	(address 2:5020/49) AT&M5&N6DP\T\r
+#ModemDial	(speed < 4800) AT&N3DP\T\r
+ModemDial	ATDP\T\r
 ModemOK		OK
 ModemConnect	CONNECT
 ModemError	BUSY
@@ -311,6 +304,7 @@ ModemError	NO\sCARRIER
 ModemError	NO\sDIAL
 ModemError	RING\r
 ModemError	ERROR
+ModemError	VOICE
 
 # Timeouts to wait for "OK" and "CONNECT", cannot be prefixed by logical
 # expression.
@@ -342,9 +336,9 @@ options		(time Any0000-2359) NoHold
 
 # EMSI data for this node
 # From this line on values CANNOT be prefixed with logical expression
-Name		== Oriental BBS ==
-Location	Liège Belgium
-SysOp		Pablo Saratxaga
-Phone		32-4-3445020
+Name		== A Debian GNU/Linux BBS ==
+Location	Unknown
+SysOp		User Name
+Phone		xx-xx-xxxxxxxx
 Speed		14400
 Flags		XA,V32B,V42B

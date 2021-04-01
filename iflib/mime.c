@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include <string.h>
 #include "needed.h"
 #include "lutil.h"
 #include "xutil.h"

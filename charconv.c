@@ -162,7 +162,7 @@ void kconv(char *in, char **out, int incode, int outcode)
       case CHRS_CP866 :
 	switch (outcode) {
 	  case CHRS_ISO_8859_5 : eight2eight(in,out,CP866__ISO_8859_5); break;
-          case CHRS_KOI8_R :
+	  case CHRS_KOI8_R :	 eight2eight(in,out,CP866__KOI8_R); break;
           case CHRS_KOI8_U :	 eight2eight(in,out,CP866__KOI8); break;
           default :		 noconv(in,out); break;
         }
@@ -321,6 +321,13 @@ void kconv(char *in, char **out, int incode, int outcode)
         }
         break;
       case CHRS_KOI8_R :
+        switch (outcode) {
+          case CHRS_CP866 :	 eight2eight(in,out,KOI8_R__CP866); break;
+          case CHRS_ISO_8859_5 : eight2eight(in,out,KOI8__ISO_8859_5); break;
+          case CHRS_MIK_CYR :	 eight2eight(in,out,KOI8__MIK_CYR); break;
+          default :		 noconv(in,out); break;
+	}
+        break;
       case CHRS_KOI8_U :
         switch (outcode) {
           case CHRS_CP866 :	 eight2eight(in,out,KOI8__CP866); break;

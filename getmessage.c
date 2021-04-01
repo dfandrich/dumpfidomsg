@@ -20,6 +20,7 @@
 #include "config.h"
 #include "crc.h"
 #include "charset.h"
+#include "acl.h"
 
 #define KWDCHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
 		"abcdefghijklmnopqrstuvwxyz" \
@@ -29,6 +30,8 @@ extern time_t parsedate(char *,void *);
 extern char *rfcdate(time_t);
 
 int pgpsigned;
+
+extern acl *packet_acl, *message_acl, *origin_acl;
 
 static time_t parsefdate(char *,void *);
 static time_t parsefdate(str,now)
@@ -59,6 +62,7 @@ faddr *p_from,*p_to;
 	rfcmsg *kmsg=NULL,**tmsg;
 	int tmp,rc,maxrc=0;
 	faddr f,t,*o;
+	faddr m_from, m_to;
 	int flags;
 	int waskluge,badkludge;
 	time_t mdate=0L;
@@ -152,6 +156,10 @@ faddr *p_from,*p_to;
 	debug(5,"message to   %s",ascfnode(&t,0x7f));
 	debug(5,"message subj \"%s\"",S(subj));
 	debug(5,"message date \"%s\"",rfcdate(mdate));
+
+	/* We need only numeric fields */
+	m_from=f;
+	m_to=t;
 
 	tear_off=0L;
 	orig_off=0L;
@@ -336,11 +344,37 @@ faddr *p_from,*p_to;
 	if ((via_off) && (via_off < endmsg_off)) endmsg_off=via_off;
 	debug(5,"end message offset %ld",(long)endmsg_off);
 	
+
+	if (kmsg && !strcmp(kmsg->key,"AREA"))
+	{
+		if (match_acl(kmsg->val, p_from, p_to, packet_acl) == DENY) 
+		{
+			loginf("message from %s in area %s denied by packet header filter",
+			    ascfnode(p_from, 0xf), kmsg->val);
+			goto skip;
+		}
+		if (match_acl(kmsg->val, &m_from, &m_to, message_acl) == DENY)
+		{
+			loginf("message from %s in area %s denied by message header filter",
+			    ascfnode(&m_from, 0xf), kmsg->val);
+			goto skip;
+		}
+
+		if (match_acl(kmsg->val, &f, NULL, origin_acl) == DENY)
+		{
+			loginf("message from %s in area %s denied by origin filter",
+			    ascfnode(&f, 0xf), kmsg->val);
+			goto skip;
+		}
+
+	}
+
 	rewind(fp);
 	rc=mkrfcmsg(&f,&t,subj,orig,mdate,flags,fp,endmsg_off,kmsg);
 	if (rc) rc+=10;
 	if (rc > maxrc) maxrc=rc;
 
+skip:
 	fclose(fp);
 	tidyrfc(kmsg);
 	if(f.name) free(f.name); f.name=NULL;

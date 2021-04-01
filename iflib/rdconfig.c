@@ -58,6 +58,16 @@ char *nlbase=NULL;
 
 dom_trans *domtrans=NULL;
 
+#ifdef FBOX
+ fa_list *InBox = NULL;
+ fa_list *OutBox = NULL;
+#endif
+
+#ifdef HIDDEN
+ fa_list *Override = NULL;
+ fa_list *Hidden = NULL;
+#endif
+
 moderator_list *approve=NULL;
 
 fa_list *whoami=NULL;
@@ -92,6 +102,11 @@ long maxgroups=0L;
 long timeoutreset=2L;
 long timeoutconnect=75L;
 long dialdelay=0L;
+#ifdef RESTAMP_OLD_POSTINGS
+long restampolder=RESTAMP_OLD_POSTINGS;
+#endif
+long paranoid=0L;
+char *sentmode="^";
 
 char *oldfilemap=NULL;
 char maptab[] = {
@@ -162,6 +177,9 @@ int defaultrfcchar=CHRS_DEFAULT_RFC;
 int defaultftnchar=CHRS_DEFAULT_FTN;
 int toftnchar=CHRS_NOTSET;
 time_t configtime=0L;
+char *pktaclfile=NULL;
+char *msgaclfile=NULL;
+char *orgaclfile=NULL;
 
 			/* Local */
 
@@ -295,6 +313,18 @@ static struct _keytab {
 	{"defaultrfcchar", getdefcode,	(char**)&defaultrfcchar},
 	{"defaultftnchar", getdefcode2,	(char**)&defaultftnchar},
 	{"toftnchar",	getdefcode2,	(char**)&toftnchar}, 
+#ifdef RESTAMP_OLD_POSTINGS
+	{"restampolder", getlong,	(char**)&restampolder},
+#endif
+	{"paranoid",	getlong,	(char**)&paranoid},
+	{"sentmode",	getstr,		&sentmode},
+	{"packetacl",	getstr,		&pktaclfile},
+	{"messageacl",	getstr,		&msgaclfile},
+	{"originacl",	getstr,		&orgaclfile},
+#ifdef HIDDEN
+	{"override",	getadpw,	(char **)&Override},
+	{"hidden",	getadpw,	(char **)&Hidden},
+#endif
 	{NULL,		NULL,		NULL}
 };
 

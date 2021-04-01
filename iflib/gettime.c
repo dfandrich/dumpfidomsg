@@ -8,7 +8,6 @@
 #include <time.h>
 #endif	/* defined(DO_NEED_TIME) */
 #include <sys/time.h>
-#include "clibrary.h"
 #include "libinn.h"
 
 int

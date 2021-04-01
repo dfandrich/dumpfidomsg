@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <string.h>
-#include <varargs.h>
+#include <stdarg.h>
 #include <errno.h>
 #include <time.h>
 #ifdef HAS_SYSLOG
@@ -12,6 +12,8 @@
 #else
 #define LOG_USER 0
 #endif
+
+#include "xutil.h"
 
 #ifdef HAS_SYSLOG
 static int syslog_opened=0;
@@ -143,17 +145,14 @@ char c;
 		syslog(level,"\terrno=%d : %s",\
                         errno,strerror(errno));
 
-void loginf(va_alist)
-va_dcl
+void loginf(char *fmt,...)
 {
 	va_list	args;
-	char	*fmt;
 #ifndef HAS_SYSLOG
 	int	oldmask;
 #endif
 
-	va_start(args);
-	fmt=va_arg(args, char*);
+	va_start(args,fmt);
 	if (verbose)
 	{
 		PRINT_DEBUG(fmt,args);
@@ -183,17 +182,14 @@ va_dcl
 	return;
 }
 
-void logerr(va_alist)
-va_dcl
+void logerr(char *fmt,...)
 {
 	va_list	args;
-	char	*fmt;
 #ifndef HAS_SYSLOG
 	int	oldmask;
 #endif
 
-	va_start(args);
-	fmt=va_arg(args, char*);
+	va_start(args,fmt);
 	if (verbose)
 	{
 		PRINT_DEBUG(fmt,args);
@@ -223,16 +219,11 @@ va_dcl
 	return;
 }
 
-void debug(va_alist)
-va_dcl
+void debug(unsigned long level, char *fmt,...)
 {
 	va_list	args;
-	unsigned long	level;
-	char	*fmt;
 
-	va_start(args);
-	level=va_arg(args, unsigned long);
-	fmt=va_arg(args, char*);
+	va_start(args,fmt);
 
 	if ((verbose && (level == 0)) || (verbose & (1 << (level-1))))
 	{
