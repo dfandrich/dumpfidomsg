@@ -39,4 +39,4 @@ Internet message on stdout, like this:
 ## Author
 
 The original author was Eugene G. Crosser. This version was created by Dan
-Fandrich.
+Fandrich <dan@coneharvesters.com>.
