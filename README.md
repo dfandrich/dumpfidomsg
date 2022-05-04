@@ -18,12 +18,12 @@ format for easier archiving or indexing.
 The source code can be downloaded from https://github.com/dfandrich/dumpfidomsg
 Edit the CONFIG file to match your target system then build it with
 
-  make
+    make
 
 Install it to the right location with
 
-  make install
-  make man
+    make install
+    make man
 
 The makefile uses certain GNU make extensions and will not work with other make
 programs. Note that not all compile-time features mentioned in CONFIG have been
@@ -34,7 +34,7 @@ tested in this derivative.
 Pass a Fidonet message into stdin of the program and it will convert it to an
 Internet message on stdout, like this:
 
-  dumpfidomsg < 123.msg > 123.eml
+    dumpfidomsg < 123.msg > 123.eml
 
 ## Author
 
