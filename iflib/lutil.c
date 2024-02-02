@@ -155,7 +155,10 @@ void loginf(char *fmt,...)
 	va_start(args,fmt);
 	if (verbose)
 	{
-		PRINT_DEBUG(fmt,args);
+		va_list args2;
+		va_copy(args2, args);
+		PRINT_DEBUG(fmt,args2);
+		va_end(args2);
 	}
 #ifdef HAS_SYSLOG
 	if (!syslog_opened)
@@ -192,7 +195,10 @@ void logerr(char *fmt,...)
 	va_start(args,fmt);
 	if (verbose)
 	{
-		PRINT_DEBUG(fmt,args);
+		va_list args2;
+		va_copy(args2, args);
+		PRINT_DEBUG(fmt,args2);
+		va_end(args2);
 	}
 #ifdef HAS_SYSLOG
 	if (!syslog_opened)
